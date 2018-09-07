@@ -169,11 +169,80 @@
  *     CallExpression() {},
  *   };
  * 
+ * 当我们遍历AST时，我们会在进入一个节点时调用vositor上与这个节点类型相匹配的方法。
+ * 
+ * 为了让这个方法可以操作节点，我们把这个节点和它的父节点引用作为参数传递进去。
+ * 
+ *   var visitor = {
+ *     NumberLiteral(node, parent) {},
+ *     CallExpression(node, parent) {},
+ *   };
+ * 
+ * 但是，也有可能我们需要在退出一个节点时调用方法。想象一下我们AST的结构：
+ * 
+ *   - Program
+ *     - CallExpression
+ *       - NumberLiteral
+ *       - CallExpression
+ *         - NumberLiteral
+ *         - NumberLiteral
+ * 
+ * 当我们从顶层一路遍历下来，我们会走到一条分支的尽头，此时我们需要退出这个分支。
+ * 所以当我们从顶层向下走的时候我们调用enter，当我们返回的时候调用exit。
+ * 
+ *   -> Program (enter)
+ *     -> CallExpression (enter)
+ *       -> Number Literal (enter)
+ *       <- Number Literal (exit)
+ *       -> Call Expression (enter)
+ *          -> Number Literal (enter)
+ *          <- Number Literal (exit)
+ *          -> Number Literal (enter)
+ *          <- Number Literal (exit)
+ *       <- CallExpression (exit)
+ *     <- CallExpression (exit)
+ *   <- Program (exit)
+ * 
+ * 为了支持这种模式，我们需要再次改变visitor的结构：
+ * 
+ *   var visitor = {
+ *     NumberLiteral: {
+ *       enter(node, parent) {},
+ *       exit(node, parent) {},
+ *     }
+ *   };
  */
 
 
 /**
+ * 代码生成
+ * --------
  * 
+ * 编译器的最后一部分是代码生成，有时候一些编译器会在此时做一些和转换时期交叉的处理，
+ * 但是对大多数的代码生成器来说，就是将AST重新变回字符串形式的代码。
+ * 
+ * 代码生成器通常有几种不同的工作方式，有一些编译器会重新使用之前生成的标记(tokens)，
+ * 还有一些编译器会创建一个单独的代码展示对象，以便他们可以线性的打印节点。但是我们将
+ * 会使用我们刚刚创建的相同的AST，这是我们接下来需要关注的。
+ * 
+ * 我们的代码生成器知道如何有效地打印不同类型的节点，它会递归的调用自己去打印嵌套的节点，
+ * 知道把所有的节点都打印到一个长长的字符串中。
+ */
+
+
+/**
+ * 就是这样，以上就是我们编译器全部的东西。
+ * 
+ * 不是说所有的编译器都是以上描述的样子。编译器被用来做各种各样的事情，有时候它们需要更多
+ * 的步骤去实现特定的需求。
+ * 
+ * 但是现在，对于大多数编译器长什么样子，你应该有一个具象的概念了。
+ * 
+ * 现在我把一切都解释清楚了，你们应该立刻可以写出自己的编译器了吧？（大雾）
+ * 
+ * 哈哈开玩笑的，我还将继续帮助你们完成一个编译器。
+ * 
+ * 让我们开始吧......
  */
 
 const tokenizer = require('./src/tokenizer');
