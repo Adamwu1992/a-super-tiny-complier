@@ -116,7 +116,7 @@ module.exports = function tokenizer(input) {
       // 直到遇到另一个双引号为止
       while (char !== '"') {
         value += char;
-        char = input[+current];
+        char = input[++current];
       }
       // 跳过关闭的双引号
       char = input[++current];

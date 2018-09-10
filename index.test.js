@@ -1,5 +1,8 @@
-const compiler = require('./index');
+const compiler = require('./index')
 
-const input = '(add 2 (subtract 4 2))';
-const output = compiler(input);
-console.log(output);
+test(`compiler '(subtract 123 (add 456 "999"))'`, () => {
+  const input = '(subtract 123 (add 456 "999"))';
+  const expected = 'subtract(123, add(456, "999"));';
+
+  expect(compiler(input)).toBe(expected);
+})

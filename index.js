@@ -250,22 +250,10 @@ const parser = require('./src/parser');
 const transformer = require('./src/transformer');
 const codeGenerator = require('./src/code-generator');
 
-function log(prefix, msg) {
-  console.log(`${prefix} >>>`);
-  console.log(msg);
-  console.log('<<<');
-}
-
 module.exports = function compiler(input) {
-  log('input', input);
   const tokens = tokenizer(input);
-  log('tokens', tokens);
   const ast = parser(tokens);
-  log('ast', ast);
   const newAst = transformer(ast);
-  log('new ast', newAst);
   const output = codeGenerator(newAst);
-  log('output', output);
-
   return output;
 }

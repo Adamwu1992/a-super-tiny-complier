@@ -1,0 +1,19 @@
+{
+  "name": "a-super-tiny-compiler",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/Adamwu1992/a-super-tiny-complier.git",
+  "author": "adam <adamwu1992@163.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^23.5.0"
+  },
+  "scripts": {
+    "test:token": "jest test/tokenizer.test.js",
+    "test:parse": "jest test/parser.test.js",
+    "test:trav": "jest test/traverser.test.js",
+    "test:trans": "jest test/transformer.test.js",
+    "test:gen": "jest test/code-generator.test.js",
+    "test": "jest index.test.js"
+  }
+}
